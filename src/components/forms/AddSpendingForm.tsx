@@ -1,70 +1,85 @@
+import type { Categories } from "@prisma/client";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 
-export type AddCategoryInterface = {
-  categoryName: string;
-  categoryColor: string;
-};
+export const AddSpendingForm = ({
+  categories,
+}: {
+  categories: Categories[] | undefined;
+}) => {
+  const { register, handleSubmit } = useForm();
 
-export const AddSpendingForm = ({ onSubmit }: { onSubmit: any }) => {
-  const { register, handleSubmit } = useForm<AddCategoryInterface>();
-
-  const onS = async (data: AddCategoryInterface) => {
-    const d = await onSubmit.mutate(data);
-    if (onSubmit.isError) {
-      console.log("error");
-    }
-    if (onSubmit.isSuccess) {
-      console.log(d);
-    }
+  const onSubmit = async (data: any) => {
+    // const returnData = await onSubmit.mutate(data);
+    // if (onSubmit.isError) {
+    //   console.log("error");
+    // }
+    // if (onSubmit.isSuccess) {
+    //   console.log(d);
+    // }
   };
+
+  console.log(categories);
   return (
     <form
-      onSubmit={handleSubmit(onS)}
-      className="flex flex-col items-center px-8"
+      onSubmit={handleSubmit(onSubmit)}
+      className="flex w-full flex-col  bg-white/100 p-8"
     >
       <div className="form-control">
-        <label className="mb-3 self-start">Nazwa kategorii</label>
+        <label className="mb-3 self-start">Tytuł</label>
         <input
           type="text"
-          placeholder="np. Jedzenie"
+          placeholder="np. "
           className="input mb-5 w-full max-w-xs"
-          {...register("categoryName")}
+          {...register("title")}
         />
       </div>
-      <div className="w-xs form-control">
-        <label className="mb-3 self-start">Kolor kategorii</label>
-        <div className="flex">
-          <label htmlFor="red" className="label cursor-pointer px-3">
-            <input
-              {...register("categoryColor")}
-              value="red"
-              type="radio"
-              id="red"
-              className="radio checked:bg-red-500"
-            />
-          </label>
-          <label htmlFor="blue" className="label cursor-pointer px-3">
-            <input
-              {...register("categoryColor")}
-              value="blue"
-              type="radio"
-              id="blue"
-              className="radio checked:bg-blue-500"
-            />
-          </label>
-          <label htmlFor="green" className="label cursor-pointer px-3">
-            <input
-              {...register("categoryColor")}
-              value="green"
-              type="radio"
-              id="green"
-              className="radio checked:bg-green-500"
-            />
-          </label>
-        </div>
+      <div className="form-control">
+        <label className="mb-3 self-start">Miejsce</label>
+        <input
+          type="text"
+          placeholder="np. Biedronka"
+          className="input mb-5 w-full max-w-xs"
+          {...register("contractor")}
+        />
+      </div>
+      <div className="form-control">
+        <label className="mb-3 self-start">Opis</label>
+        <input
+          type="text"
+          placeholder="np. Dziecięce ubranka"
+          className="input mb-5 w-full max-w-xs"
+          {...register("description")}
+        />
+      </div>
+      <div className="form-control">
+        <label className="mb-3 self-start">Categoria</label>
+
+        {categories && categories.length > 0 ? (
+          <select className="select w-full max-w-xs">
+            {categories.map((category) => (
+              <option key={category.id} id={category.id}>
+                {category.categoryName}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <div className="w-full">
+            <h4>Nie posiadasz kategorii</h4>
+            <Link href={"categories"}>Dodaj kategorię</Link>
+          </div>
+        )}
+      </div>
+      <div className="form-control">
+        <label className="mb-3 self-start">Data</label>
+        <input type="date" className=" input mb-5 w-full max-w-xs" />
       </div>
 
-      <input type="submit" value="Dodaj kategorie" className=" btn mt-3" />
+      <input
+        type="submit"
+        value="Dodaj wydatek"
+        className=" btn mt-3 max-w-xs"
+      />
     </form>
   );
 };

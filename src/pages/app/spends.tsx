@@ -12,7 +12,7 @@ const App: NextPage = () => {
       <main className=" h-full gap-4 overflow-hidden">
         <Instruction />
         <section>
-          <AddSpendingForm />
+          <AddSpendingForm categories={categoryData.data} />
         </section>
       </main>
     </Layout>
