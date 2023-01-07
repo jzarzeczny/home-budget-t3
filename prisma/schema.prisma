@@ -14,8 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 // Necessary for Next auth
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -65,9 +63,20 @@ model User {
 }
 
 model Categories {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   categoryName  String
   categoryColor String
-  user          User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId        String @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String      @db.ObjectId
+  Spendings     Spendings[]
+}
+
+model Spendings {
+  id              String      @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  contractor      String
+  description     String?
+  category        Categories? @relation(fields: [categoryId], references: [id])
+  categoryId      String?     @db.ObjectId
+  transactionDate DateTime
 }
