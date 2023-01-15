@@ -4,6 +4,7 @@ import { type NextPage } from "next";
 import { api } from "@utils/api";
 import { CategoryTable } from "@components/CategoriesComponents/CategoryTable";
 import { Layout } from "@components/Layout";
+import type { Categories } from "@prisma/client";
 
 const App: NextPage = () => {
   const categoryData = api.categories.getAllCategories.useQuery();
@@ -11,17 +12,17 @@ const App: NextPage = () => {
 
   const addCategory = api.categories.addCategory.useMutation({
     async onMutate(newData) {
-      // Cancel outgoing fetches (so they don't overwrite our optimistic update)
       await utils.categories.getAllCategories.cancel();
-      // Get the data from the queryCache
       const prevData = utils.categories.getAllCategories.getData();
-      // Perform optimistic update
-      utils.categories.getAllCategories.setData(undefined, (old) => {
-        if (old) {
-          return [...old, newData];
+      utils.categories.getAllCategories.setData(
+        undefined,
+        (old: Categories[]) => {
+          if (old) {
+            return [...old, newData];
+          }
+          return [];
         }
-        return [];
-      });
+      );
       //Save prev data for call fail
       return { prevData };
     },
@@ -38,7 +39,6 @@ const App: NextPage = () => {
 
   const removeCategory = api.categories.removeCategory.useMutation({
     async onMutate(categoryId) {
-      console.log(categoryId);
       await utils.categories.getAllCategories.cancel();
       const prevData = utils.categories.getAllCategories.getData();
 

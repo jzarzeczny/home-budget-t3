@@ -9,7 +9,7 @@ export function Layout({ children }: { children: JSX.Element }) {
         </Link>
         <div className="w-full justify-end gap-3 pr-3">
           <Link href={"/app/categories"}>Kategorie</Link>
-          <Link href={"/app/spends"}>Wydatki</Link>
+          <Link href={"/app/expenses"}>Wydatki</Link>
         </div>
       </header>
       {children}

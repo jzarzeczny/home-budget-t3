@@ -3,30 +3,28 @@ import { parseCSV } from "@utils/csvParsers";
 import type { TransactionInterface } from "@utils/csvParsers";
 import { useForm } from "react-hook-form";
 
-interface AddSpendingFileFormInterface {
+interface AddExpenseFileFormInterface {
   file: File[];
   type: string;
 }
 
-export const AddSpendingFileForm = ({
+export const AddExpenseFileForm = ({
   categories,
-  setSpendings,
+  setExpenses,
 }: {
   categories: Categories[] | undefined;
-  setSpendings: any;
+  setExpenses: any;
 }) => {
-  const { register, handleSubmit } = useForm<AddSpendingFileFormInterface>();
+  const { register, handleSubmit } = useForm<AddExpenseFileFormInterface>();
 
-  const onSubmit = async (data: AddSpendingFileFormInterface) => {
+  const onSubmit = async (data: AddExpenseFileFormInterface) => {
     const { file } = data;
     if (file[0]) {
       const data = (await parseCSV(file[0])) as TransactionInterface[];
-      console.log(data);
-      setSpendings((prev: TransactionInterface[]) => [...prev, ...data]);
+      setExpenses((prev: TransactionInterface[]) => [...prev, ...data]);
     }
   };
 
-  console.log(categories);
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}

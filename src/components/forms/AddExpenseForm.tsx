@@ -1,10 +1,10 @@
 import { useForm } from "react-hook-form";
 
-export const AddSpendingForm = ({ setSpending }: { setSpending: any }) => {
+export const AddExpenseForm = ({ setExpense }: { setExpense: any }) => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data: any) => {
-    setSpending((prev: any) => [...prev, data]);
+    setExpense((prev: any) => [...prev, data]);
   };
 
   return (

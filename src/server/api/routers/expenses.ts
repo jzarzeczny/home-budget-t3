@@ -10,6 +10,19 @@ export const expensesRouter = createTRPCRouter({
       },
     });
   }),
+  expensesWithCategory: protectedProcedure.query(({ ctx }) => {
+    return ctx.prisma.expenses.findMany({
+      where: {
+        userId: ctx.session.user.id,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      include: {
+        category: true,
+      },
+    });
+  }),
 
   addExpense: protectedProcedure
     .input(
@@ -25,7 +38,6 @@ export const expensesRouter = createTRPCRouter({
     )
     .mutation(({ input, ctx }) => {
       const userId = ctx.session.user.id;
-
       return ctx.prisma.expenses.create({
         data: {
           userId,

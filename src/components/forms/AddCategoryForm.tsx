@@ -9,13 +9,7 @@ export const AddCategoryForm = ({ onSubmit }: { onSubmit: any }) => {
   const { register, handleSubmit } = useForm<AddCategoryInterface>();
 
   const onS = async (data: AddCategoryInterface) => {
-    const d = await onSubmit.mutate(data);
-    if (onSubmit.isError) {
-      console.log("error");
-    }
-    if (onSubmit.isSuccess) {
-      console.log(d);
-    }
+    await onSubmit.mutate(data);
   };
   return (
     <form

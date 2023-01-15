@@ -4,7 +4,6 @@ export interface TransactionInterface {
   transactionDate: string;
   contractor: string;
   title: string;
-  description: string;
   value: number;
   currency: string;
 }
@@ -37,8 +36,8 @@ function createArrayOfObjects(encodedCSV: string[][]): TransactionInterface[] {
       transactionDate: transaction[0] as string,
       contractor: transaction[2] as string,
       title: transaction[3] as string,
-      transferValue: parseInt(transaction[8] as string),
-      transferCurrency: transaction[9] as string,
+      value: parseInt(transaction[8] as string),
+      currency: transaction[9] as string,
     })
   );
   return transactionData;

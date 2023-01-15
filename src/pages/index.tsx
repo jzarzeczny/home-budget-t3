@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export function getServerSideProps({ context }: { context: any }) {
-  console.log(context);
   return { props: {} };
 }
 

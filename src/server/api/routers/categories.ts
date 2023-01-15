@@ -32,7 +32,6 @@ export const categoriesRouter = createTRPCRouter({
   removeCategory: protectedProcedure
     .input(z.string())
     .mutation(({ input, ctx }) => {
-      console.log(input);
       return ctx.prisma.categories.delete({
         where: {
           id: input,
