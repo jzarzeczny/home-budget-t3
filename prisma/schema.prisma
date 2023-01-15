@@ -60,6 +60,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   categories    Categories[]
+  Expenses     Expenses[]
 }
 
 model Categories {
@@ -68,15 +69,19 @@ model Categories {
   categoryColor String
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        String      @db.ObjectId
-  Spendings     Spendings[]
+  Expenses     Expenses[]
 }
 
-model Spendings {
+model Expenses {
   id              String      @id @default(auto()) @map("_id") @db.ObjectId
   title           String
   contractor      String
-  description     String?
+  description     String
+  value           Int
+  currency        String
   category        Categories? @relation(fields: [categoryId], references: [id])
-  categoryId      String?     @db.ObjectId
+  categoryId      String    @db.ObjectId
   transactionDate DateTime
+  user            User        @relation(fields: [userId], references: [id])
+  userId          String      @db.ObjectId
 }

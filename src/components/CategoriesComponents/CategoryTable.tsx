@@ -39,7 +39,7 @@ export const CategoryTable: FC<CategoryTableInterface> = ({
   removeCategory,
 }) => {
   return (
-    <div className="flex  flex-col items-center  lg:col-start-3 lg:col-end-5 lg:row-start-2">
+    <div className="flex  flex-col items-center lg:col-start-3 lg:col-end-5 lg:row-start-2">
       <h3 className=" pt-5 pb-8 text-center text-xl">Kategorie</h3>
       <table className="mx-3 table w-full ">
         <thead className="flex w-full">
