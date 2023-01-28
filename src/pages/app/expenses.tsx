@@ -27,8 +27,6 @@ const App: NextPage = () => {
 
   const { data: expenses } = api.expenses.expensesWithCategory.useQuery();
 
-  console.log(categories);
-
   const addCostToCategory = (
     e: MouseEvent<HTMLButtonElement>,
     categoryId: string
@@ -72,10 +70,7 @@ const App: NextPage = () => {
           <AddExpenseForm setExpense={setExpensesData} />
           <Heading text="Importuj wydatki" />
           <div className="flex items-center justify-around px-5">
-            <AddExpenseFileForm
-              categories={categories}
-              setExpenses={setExpensesData}
-            />
+            <AddExpenseFileForm setExpenses={setExpensesData} />
           </div>
         </section>
         <section className="w-full p-5">

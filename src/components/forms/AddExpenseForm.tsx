@@ -1,10 +1,31 @@
+import type { TransactionInterface } from "@utils/csvParsers";
+import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 
-export const AddExpenseForm = ({ setExpense }: { setExpense: any }) => {
-  const { register, handleSubmit } = useForm();
+interface FormSubmission {
+  title: string;
+  contractor: string;
+  description: string;
+  transactionDate: string;
+  value: number;
+  currency: string;
+}
 
-  const onSubmit = async (data: any) => {
-    setExpense((prev: any) => [...prev, data]);
+export const AddExpenseForm = ({
+  setExpense,
+}: {
+  setExpense: Dispatch<SetStateAction<TransactionInterface[]>>;
+}) => {
+  const { register, handleSubmit } = useForm<FormSubmission>();
+
+  const onSubmit = async (data: FormSubmission) => {
+    setExpense((prev: TransactionInterface[]) => [
+      ...prev,
+      {
+        ...data,
+        description: data.description,
+      },
+    ]);
   };
 
   return (
@@ -43,7 +64,7 @@ export const AddExpenseForm = ({ setExpense }: { setExpense: any }) => {
         <input
           type="date"
           className="input-bordered  input mb-5 w-full max-w-xs"
-          {...register("date")}
+          {...register("transactionDate")}
         />
       </div>
       <div className="form-control w-full">
