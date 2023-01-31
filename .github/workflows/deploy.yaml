@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [main, Cd]
+    branches: [main, cd]
   workflow_dispatch:
     inputs:
       logLevel:
@@ -21,7 +21,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build and Publish to Github Packages Registry
         uses: jzarzeczny
-        Publish-Docker-Github-Action@master
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
           GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
