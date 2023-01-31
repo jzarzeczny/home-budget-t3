@@ -27,7 +27,7 @@ jobs:
           GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
           NEXTAUTH_SECRET: ${{secrets.NEXTAUTH_SECRET}}
           NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
-        
+
         with:
           name: jzarzeczny/home-budget-t3/home-budget-t3
           registry: ghcr.io
@@ -43,13 +43,12 @@ jobs:
           GITHUB_USERNAME: ${{ secrets.USERNAME }}
           GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
         with:
-            HOST: ${{ secrets.HOST }}
+          HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
-          script:
-            cd home-budget-t3
+          script: cd home-budget-t3
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull ghcr.io/my_github_username/my_repository_name/my_image_name:latest
             docker stop containername
