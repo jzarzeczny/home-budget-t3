@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Build and Publish to Github Packages Registry
-        uses: elgohr/Publish-Docker-Github-Action@master
+        uses: elgohr/Publish-Docker-Github-Action@v4
         env:
           DATABASE_URL: ${{secrets.DATABASE_URL}}
           GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
@@ -32,7 +32,7 @@ jobs:
         with:
           name: jzarzeczny/home-budget-t3/home-budget-t3
           registry: ghcr.io
-          username: ${{ secrets.USERNAME }}
+          username: ${{ secrets.USER }}
           password: ${{ secrets. GITHUB_TOKEN }}
           dockerfile: Dockerfile
           buildargs: DATABASE_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL
@@ -41,7 +41,7 @@ jobs:
       - name: Deploy package to Mikrus
         uses: appleboy/ssh-action@master
         env:
-          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_USERNAME: ${{ secrets.USER }}
           GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
         with:
           HOST: ${{ secrets.HOST }}
