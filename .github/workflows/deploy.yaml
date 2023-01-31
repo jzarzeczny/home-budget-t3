@@ -29,7 +29,7 @@ jobs:
           NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
 
         with:
-          name: jzarzeczny/home-budget-t3:latest
+          name: jzarzeczny/home-budget-t3
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets. GITHUB_TOKEN }}
