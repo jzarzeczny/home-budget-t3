@@ -50,7 +50,7 @@ jobs:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: cd home-budget-t3
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
-            docker pull ghcr.io/my_github_username/my_repository_name/my_image_name:latest
-            docker stop containername
+            docker pull ghcr.io/jzarzeczny/home-budget-t3
+            docker stop home-budget-t3
             docker system prune -f
-            docker run --name containername -dit -p 3000:3000 ghcr.io/my_github_username/my_repository_name/my_image_name:latest
+            docker run --name home-budget-t3 -dit -p 3000:3000 ghcr.io/jzarzeczny/home-budget-t3:latest
