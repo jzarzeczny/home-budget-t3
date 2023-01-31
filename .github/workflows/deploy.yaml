@@ -1,0 +1,58 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [main, Cd]
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "warning"
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    container: node:16
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Build and Publish to Github Packages Registry
+        uses: jzarzeczny
+        Publish-Docker-Github-Action@master
+        env:
+          DATABASE_URL: ${{secrets.DATABASE_URL}}
+          GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+          GOOGLE_CLIENT_SECRET: ${{secrets.GOOGLE_CLIENT_SECRET}}
+          NEXTAUTH_SECRET: ${{secrets.NEXTAUTH_SECRET}}
+          NEXTAUTH_URL: ${{secrets.NEXTAUTH_URL}}
+        
+        with:
+          name: jzarzeczny/home-budget-t3/home-budget-t3
+          registry: ghcr.io
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets. GITHUB_TOKEN }}
+          dockerfile: Dockerfile
+          buildargs: DATABASE_URL, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET, NEXTAUTH_URL
+          tags: latest
+
+      - name: Deploy package to Mikrus
+        uses: appleboy/ssh-action@master
+        env:
+          GITHUB_USERNAME: ${{ secrets.USERNAME }}
+          GITHUB_TOKEN: ${{ secrets. GITHUB_TOKEN }}
+        with:
+            HOST: ${{ secrets.HOST }}
+          USERNAME: ${{ secrets.USERNAME }}
+          PORT: ${{ secrets.PORT }}
+          KEY: ${{ secrets.SSHKEY }}
+          envs: GITHUB_USERNAME, GITHUB_TOKEN
+          script:
+            cd home-budget-t3
+            docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+            docker pull ghcr.io/my_github_username/my_repository_name/my_image_name:latest
+            docker stop containername
+            docker system prune -f
+            docker run --name containername -dit -p 3000:3000 ghcr.io/my_github_username/my_repository_name/my_image_name:latest

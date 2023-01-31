@@ -6,7 +6,7 @@ const ExpensesCard = ({ expense }: { expense: TransactionInterface }) => {
       <div className="card-body">
         <h2 className="card-title">{expense.title}</h2>
         <p>{expense.contractor}</p>
-        <p>{expense.description}</p>
+        <p>{expense.title}</p>
         <p>
           {expense.value}
           {expense.currency}

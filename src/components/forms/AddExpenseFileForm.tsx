@@ -1,7 +1,7 @@
-import type { Categories } from "@prisma/client";
 import { parseCSV } from "@utils/csvParsers";
 import type { TransactionInterface } from "@utils/csvParsers";
 import { useForm } from "react-hook-form";
+import type { Dispatch, SetStateAction } from "react";
 
 interface AddExpenseFileFormInterface {
   file: File[];
@@ -9,11 +9,9 @@ interface AddExpenseFileFormInterface {
 }
 
 export const AddExpenseFileForm = ({
-  categories,
   setExpenses,
 }: {
-  categories: Categories[] | undefined;
-  setExpenses: any;
+  setExpenses: Dispatch<SetStateAction<TransactionInterface[]>>;
 }) => {
   const { register, handleSubmit } = useForm<AddExpenseFileFormInterface>();
 

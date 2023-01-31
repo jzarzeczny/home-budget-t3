@@ -5,11 +5,15 @@ export type AddCategoryInterface = {
   categoryColor: string;
 };
 
-export const AddCategoryForm = ({ onSubmit }: { onSubmit: any }) => {
+export const AddCategoryForm = ({
+  onSubmit,
+}: {
+  onSubmit: (categoryData: AddCategoryInterface) => void;
+}) => {
   const { register, handleSubmit } = useForm<AddCategoryInterface>();
 
   const onS = async (data: AddCategoryInterface) => {
-    await onSubmit.mutate(data);
+    await onSubmit(data);
   };
   return (
     <form

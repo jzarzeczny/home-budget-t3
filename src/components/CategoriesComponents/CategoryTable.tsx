@@ -3,7 +3,7 @@ import type { FC } from "react";
 
 interface CategoryTableInterface {
   categories: Categories[] | undefined;
-  removeCategory: any;
+  removeCategory: (categoryId: string) => void;
 }
 
 const CategoryRow = ({
@@ -11,7 +11,7 @@ const CategoryRow = ({
   removeCategory,
 }: {
   categoryData: Categories;
-  removeCategory: any;
+  removeCategory: (categoryId: string) => void;
 }) => {
   return (
     <tr className="flex w-full">
@@ -23,10 +23,7 @@ const CategoryRow = ({
         </p>
       </th>
       <td>
-        <button
-          className="btn"
-          onClick={async () => await removeCategory.mutate(categoryData.id)}
-        >
+        <button className="btn" onClick={() => removeCategory(categoryData.id)}>
           Usuń
         </button>
       </td>

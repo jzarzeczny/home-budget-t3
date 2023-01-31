@@ -1,35 +1,21 @@
 import { Instruction } from "@components/common/Instruction";
-import { AddCategoryForm } from "@components/forms/AddCategoryForm";
+import type {
+  AddCategoryInterface} from "@components/forms/AddCategoryForm";
+import {
+  AddCategoryForm
+} from "@components/forms/AddCategoryForm";
 import { type NextPage } from "next";
 import { api } from "@utils/api";
 import { CategoryTable } from "@components/CategoriesComponents/CategoryTable";
 import { Layout } from "@components/Layout";
-import type { Categories } from "@prisma/client";
 
 const App: NextPage = () => {
   const categoryData = api.categories.getAllCategories.useQuery();
   const utils = api.useContext();
 
   const addCategory = api.categories.addCategory.useMutation({
-    async onMutate(newData) {
+    async onMutate() {
       await utils.categories.getAllCategories.cancel();
-      const prevData = utils.categories.getAllCategories.getData();
-      utils.categories.getAllCategories.setData(
-        undefined,
-        (old: Categories[]) => {
-          if (old) {
-            return [...old, newData];
-          }
-          return [];
-        }
-      );
-      //Save prev data for call fail
-      return { prevData };
-    },
-    //On error
-    onError(err, newData, ctx) {
-      //restore
-      utils.categories.getAllCategories.setData(undefined, ctx?.prevData);
     },
     //On successful call, fetch the data
     onSettled() {
@@ -57,6 +43,14 @@ const App: NextPage = () => {
     },
   });
 
+  const setRemoveCategory = (categoryId: string) => {
+    removeCategory.mutate(categoryId);
+  };
+
+  const setAddCategory = (categoryData: AddCategoryInterface) => {
+    addCategory.mutate(categoryData);
+  };
+
   return (
     <Layout>
       <main className=" h-full gap-4 overflow-hidden">
@@ -68,13 +62,13 @@ const App: NextPage = () => {
             <h3 className="pt-5 pb-8 text-center text-xl">
               Dodaj nową kategorie
             </h3>
-            <AddCategoryForm onSubmit={addCategory} />
+            <AddCategoryForm onSubmit={setAddCategory} />
           </div>
           <div className="divider lg:hidden "></div>
           {categoryData.data ? (
             <CategoryTable
               categories={categoryData.data}
-              removeCategory={removeCategory}
+              removeCategory={setRemoveCategory}
             />
           ) : (
             <div className="loading" />
