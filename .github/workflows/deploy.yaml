@@ -48,8 +48,9 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD}}
           port: ${{ secrets.SSH_PORT }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
-          script: docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+          script: |
+            docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull ghcr.io/jzarzeczny/home-budget-t3
             docker stop home-budget-t3
-            docker system prune -f
+            docker system prune --force
             docker run --name home-budget-t3 -dit -p 3000:3000 ghcr.io/jzarzeczny/home-budget-t3
