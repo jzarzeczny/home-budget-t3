@@ -40,7 +40,7 @@ jobs:
       - name: Deploy package to Mikrus
         uses: appleboy/ssh-action@master
         env:
-          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_USERNAME: ${{ secrets.USER}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           HOST: ${{ secrets.HOST }}
           USERNAME: ${{ secrets.USERNAME }}
@@ -48,7 +48,8 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
         with:
           envs: GITHUB_USERNAME, GITHUB_TOKEN
-          script: docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
+          script: ls
+            docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
             docker pull ghcr.io/jzarzeczny/home-budget-t3
             docker stop home-budget-t3
             docker system prune -f
