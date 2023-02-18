@@ -42,11 +42,11 @@ jobs:
         env:
           GITHUB_USERNAME: ${{ secrets.USER}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          HOST: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSHKEY }}
         with:
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY }}
           envs: GITHUB_USERNAME, GITHUB_TOKEN
           script: ls
             docker login ghcr.io -u $GITHUB_USERNAME -p $GITHUB_TOKEN
