@@ -39,7 +39,7 @@ RUN \
 
 ##### RUNNER
 
-FROM --platform=linux/amd64 node:16-alpine3.17 AS runner
+FROM --platform=linux/amd64 node:18-alpine3.16 AS runner
 WORKDIR /app
 
 ARG DATABASE_URL
