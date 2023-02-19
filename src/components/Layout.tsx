@@ -10,12 +10,13 @@ export function Layout({ children }: { children: JSX.Element }) {
         <div className="w-full justify-end gap-3 pr-3">
           <Link href={"/app/categories"}>Kategorie</Link>
           <Link href={"/app/expenses"}>Wydatki</Link>
+          <Link href={"/app/monthlySum"}>Podsumowanie</Link>
         </div>
       </header>
       {children}
       <footer className="footer footer-center bg-base-300 p-4 text-base-content">
         <div>
-          <p>Copyright © 2023 - All right reserved by ACME Industries Ltd</p>
+          <p>Copyright © 2023 - All right reserved by Jakub Zarzeczny</p>
         </div>
       </footer>
     </>

@@ -19,7 +19,7 @@ const App: NextPage = () => {
 
   const addExpense = api.expenses.addExpense.useMutation({
     onSettled() {
-      utils.expenses.getAllExpenses.invalidate();
+      utils.expenses.expensesWithCategory.invalidate();
     },
   });
 
@@ -44,9 +44,8 @@ const App: NextPage = () => {
         contractor: expense.contractor || "",
         description: "now",
         transactionDate: new Date(expense.transactionDate || new Date()),
-
         value: Number(expense.value) || 0,
-        currency: expense.currency || "pln",
+        currency: expense.currency || "PLN",
       };
 
       addExpense.mutate(expenseData);
@@ -73,7 +72,7 @@ const App: NextPage = () => {
             <AddExpenseFileForm setExpenses={setExpensesData} />
           </div>
         </section>
-        <section className="w-full p-5">
+        <section className="w-full p-5 ">
           <Heading text="Katagoryzuj wydatek" />
           <div className="stack ml-auto w-full">
             {expensesData.length
@@ -83,7 +82,7 @@ const App: NextPage = () => {
               : "Nie masz wydatków, dodaj jakiś!"}
           </div>
           <h3 className="py-8 text-center text-lg">Kategorie</h3>
-          <div className="flex w-full flex-col gap-3 p-5 lg:flex-row">
+          <div className="flex w-full flex-col gap-3  p-5 lg:flex-row">
             {categories?.length ? (
               categories.map((category) => (
                 <button

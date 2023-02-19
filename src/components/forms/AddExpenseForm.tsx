@@ -31,7 +31,7 @@ export const AddExpenseForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="outline-neutral-300 flex w-full flex-col items-center p-8"
+      className="outline-neutral-300 flex w-full flex-col items-center justify-center p-8"
     >
       <div className="form-control w-full">
         <label className="mb-3 self-start">Tytuł</label>
