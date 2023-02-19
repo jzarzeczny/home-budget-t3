@@ -2,11 +2,17 @@ import { Layout } from "@components/Layout";
 import { api } from "@utils/api";
 import { type NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
+  const year = Number(router.query.year) || new Date().getFullYear();
+  const month = Number(router.query.month) || new Date().getMonth() + 1;
+
   const monthlyUsage = api.expenses.getMonthlyExpenses.useQuery({
-    year: 2023,
-    month: 2,
+    year,
+    month,
   });
 
   console.log(monthlyUsage.data?.expenses);
