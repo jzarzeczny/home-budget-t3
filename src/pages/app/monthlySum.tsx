@@ -2,6 +2,7 @@ import { Layout } from "@components/Layout";
 import { api } from "@utils/api";
 import { type NextPage } from "next";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
@@ -26,9 +27,23 @@ const Home: NextPage = () => {
       <Layout>
         <main className=" h-full gap-4 overflow-hidden">
           <section className="flex justify-between px-10 py-5">
-            <button>Prev</button>
-            <h1>Date</h1>
-            <button>Next</button>
+            <Link
+              href={{
+                pathname: "/app/monthlySum",
+                query: { year: 2023, month: month - 1 },
+              }}
+            >
+              Prev
+            </Link>
+            <h1>{`${month} ${year}`}</h1>
+            <Link
+              href={{
+                pathname: "/app/monthlySum",
+                query: { year: 2023, month: month + 1 },
+              }}
+            >
+              Next
+            </Link>
           </section>
           <section className="my-5 flex justify-center">
             {monthlyUsage.data?.categories ? (
@@ -51,28 +66,30 @@ const Home: NextPage = () => {
           </section>
           <section className=" mx-auto max-w-7xl">
             <h3>Wydatki</h3>
-            <div className="overflow-x-auto">
-              <table className="table-zebra table w-full">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Nazwa</th>
-                    <th>Miejsce</th>
-                    <th>Kwota</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {monthlyUsage.data?.expenses.map((expense) => (
-                    <tr key={expense.id}>
-                      <th>{new Date(expense.createdAt).toISOString()}</th>
-                      <td>{expense.title}</td>
-                      <td>{expense.contractor}</td>
-                      <td>{expense.value}PLN</td>
+            {monthlyUsage.data?.expenses.length ? (
+              <div className="overflow-x-auto">
+                <table className="table-zebra table w-full">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Nazwa</th>
+                      <th>Miejsce</th>
+                      <th>Kwota</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {monthlyUsage.data?.expenses.map((expense) => (
+                      <tr key={expense.id}>
+                        <th>{new Date(expense.createdAt).toISOString()}</th>
+                        <td>{expense.title}</td>
+                        <td>{expense.contractor}</td>
+                        <td>{expense.value}PLN</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
           </section>
         </main>
       </Layout>

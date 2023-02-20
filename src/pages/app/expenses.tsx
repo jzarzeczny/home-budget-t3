@@ -105,33 +105,37 @@ const App: NextPage = () => {
         </section>
         <section>
           <Heading text={"Tabela wydatków"} />
-          <div className="overflow-x-auto">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Tytuł</th>
-                  <th>Miejsce</th>
-                  <th>Kategoria</th>
-                  <th>Kwota</th>
-                  <th>Akcja</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses?.map((expense) => (
-                  <tr key={expense.id}>
-                    <th>
-                      {expense.transactionDate.toLocaleDateString("pl-PL")}
-                    </th>
-                    <td>{expense.title}</td>
-                    <td>{expense.contractor}</td>
-                    <td>{expense.category?.categoryName}</td>
-                    <td>{`${expense.value}${expense.currency}`}</td>
+          {expenses?.length ? (
+            <div className="overflow-x-auto">
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tytuł</th>
+                    <th>Miejsce</th>
+                    <th>Kategoria</th>
+                    <th>Kwota</th>
+                    <th>Akcja</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {expenses?.map((expense) => (
+                    <tr key={expense.id}>
+                      <th>
+                        {expense.transactionDate.toLocaleDateString("pl-PL")}
+                      </th>
+                      <td>{expense.title}</td>
+                      <td>{expense.contractor}</td>
+                      <td>{expense.category?.categoryName}</td>
+                      <td>{`${expense.value}${expense.currency}`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>Nie masz wydatków</p>
+          )}
         </section>
       </main>
     </Layout>
