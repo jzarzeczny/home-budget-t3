@@ -16,7 +16,6 @@ const Home: NextPage = () => {
     month,
   });
 
-  console.log(monthlyUsage.data?.expenses);
   return (
     <>
       <Head>
