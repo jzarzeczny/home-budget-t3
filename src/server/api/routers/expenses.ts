@@ -1,7 +1,8 @@
-import type { Categories } from "@prisma/client";
-import { z } from "zod";
+import { z } from 'zod';
 
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import type { Categories } from '@prisma/client';
+
+import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 interface CategoriesWithValues extends Partial<Categories> {
   value: number;
@@ -21,7 +22,7 @@ export const expensesRouter = createTRPCRouter({
         userId: ctx.session.user.id,
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
       include: {
         category: true,
@@ -46,7 +47,7 @@ export const expensesRouter = createTRPCRouter({
           },
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: 'desc',
         },
         include: {
           category: true,

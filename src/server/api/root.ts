@@ -1,6 +1,6 @@
-import { createTRPCRouter } from "./trpc";
-import { categoriesRouter } from "./routers/categories";
-import { expensesRouter } from "./routers/expenses";
+import { categoriesRouter } from './routers/categories';
+import { expensesRouter } from './routers/expenses';
+import { createTRPCRouter } from './trpc';
 
 /**
  * This is the primary router for your server.

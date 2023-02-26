@@ -1,9 +1,10 @@
-import { Layout } from "@components/Layout";
-import { api } from "@utils/api";
-import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { type NextPage } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { Layout } from '@components/Layout';
+import { api } from '@utils/api';
 
 const Home: NextPage = () => {
   const router = useRouter();
@@ -28,7 +29,7 @@ const Home: NextPage = () => {
           <section className="flex justify-between px-10 py-5">
             <Link
               href={{
-                pathname: "/app/monthlySum",
+                pathname: '/app/monthlySum',
                 query: { year: 2023, month: month - 1 },
               }}
             >
@@ -37,7 +38,7 @@ const Home: NextPage = () => {
             <h1>{`${month} ${year}`}</h1>
             <Link
               href={{
-                pathname: "/app/monthlySum",
+                pathname: '/app/monthlySum',
                 query: { year: 2023, month: month + 1 },
               }}
             >

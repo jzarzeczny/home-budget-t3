@@ -1,5 +1,6 @@
-import type { Categories } from "@prisma/client";
-import type { FC } from "react";
+import type { FC } from 'react';
+
+import type { Categories } from '@prisma/client';
 
 interface CategoryTableInterface {
   categories: Categories[] | undefined;
@@ -53,12 +54,12 @@ export const CategoryTable: FC<CategoryTableInterface> = ({
         </thead>
         <tbody
           className="flex w-full flex-col items-center justify-between overflow-y-scroll"
-          style={{ height: "max-content" }}
+          style={{ height: 'max-content' }}
         >
           {categories &&
             categories.map((category) => (
               <CategoryRow
-                key={category.id || "temp-key"}
+                key={category.id || 'temp-key'}
                 categoryData={category}
                 removeCategory={removeCategory}
               />

@@ -1,5 +1,6 @@
-import { BankType } from "@components/forms/AddExpenseFileForm";
-import { parse } from "csv-parse/sync";
+import { parse } from 'csv-parse/sync';
+
+import { BankType } from '@components/forms/AddExpenseFileForm';
 
 export interface TransactionInterface {
   transactionDate: string;
@@ -14,7 +15,7 @@ export function parseCSV(csvFile: File, parserType: BankType) {
 
   return new Promise((resolve, reject) => {
     reader.onerror = () => {
-      reject(new Error("Failed to load the data"));
+      reject(new Error('Failed to load the data'));
     };
 
     reader.onload = () => {
@@ -28,7 +29,7 @@ export function parseCSV(csvFile: File, parserType: BankType) {
           return resolve(encodedCA);
 
         default:
-          throw new Error("Error in parsing");
+          throw new Error('Error in parsing');
       }
     };
     reader.readAsText(csvFile);
@@ -38,7 +39,7 @@ export function parseCSV(csvFile: File, parserType: BankType) {
 function encodeING(data: string) {
   return createArrayOfObjects(
     parse(data, {
-      delimiter: ";",
+      delimiter: ';',
       fromLine: 20,
       skipEmptyLines: true,
       skipRecordsWithError: true,
@@ -63,7 +64,7 @@ function createArrayOfObjects(encodedCSV: string[][]): TransactionInterface[] {
 function encodeCA(data: string) {
   return createArrayFromCAParse(
     parse(data, {
-      delimiter: ";",
+      delimiter: ';',
     })
   );
 }
@@ -72,16 +73,16 @@ function createArrayFromCAParse(
   encodedCSV: string[][]
 ): TransactionInterface[] {
   const transactionDateIndex = encodedCSV[0]?.indexOf(
-    "Data operacji"
+    'Data operacji'
   ) as number;
   const contractorIndex = encodedCSV[0]?.indexOf(
-    "Miejsce transakcji"
+    'Miejsce transakcji'
   ) as number;
-  const titleIndex = encodedCSV[0]?.indexOf("Tytuł") as number;
+  const titleIndex = encodedCSV[0]?.indexOf('Tytuł') as number;
   const transactionTypeIndex = encodedCSV[0]?.indexOf(
-    "Kategoria transakcji"
+    'Kategoria transakcji'
   ) as number;
-  const transferValueIndex = encodedCSV[0]?.lastIndexOf("Kwota") as number;
+  const transferValueIndex = encodedCSV[0]?.lastIndexOf('Kwota') as number;
   const transactionData: TransactionInterface[] = encodedCSV.map(
     (transaction) => ({
       transactionDate: transaction[transactionDateIndex] as string,
@@ -92,11 +93,11 @@ function createArrayFromCAParse(
 
       value: convertToJSnumberStyle(
         (transaction[transferValueIndex] as unknown as string).split(
-          " "
+          ' '
         )[0] as string
       ) as number,
       currency: (transaction[transferValueIndex] as unknown as string).split(
-        " "
+        ' '
       )[1] as string,
     })
   );
@@ -104,5 +105,5 @@ function createArrayFromCAParse(
 }
 
 function convertToJSnumberStyle(string: string): number {
-  return parseFloat(string.trim().replace(",", "."));
+  return parseFloat(string.trim().replace(',', '.'));
 }

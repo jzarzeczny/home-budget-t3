@@ -1,0 +1,7 @@
+{
+  "**/*.{ts,tsx,mjs}": [
+    "npx eslint --fix",
+    "npx prettier --write --end-of-line auto",
+    "git add ."
+  ]
+}

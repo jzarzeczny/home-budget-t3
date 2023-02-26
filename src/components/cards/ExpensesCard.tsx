@@ -1,4 +1,4 @@
-import type { TransactionInterface } from "@utils/csvParsers";
+import type { TransactionInterface } from '@utils/csvParsers';
 
 const ExpensesCard = ({ expense }: { expense: TransactionInterface }) => {
   return (

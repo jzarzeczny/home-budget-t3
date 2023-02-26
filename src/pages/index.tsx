@@ -1,19 +1,19 @@
-import { type NextPage } from "next";
-import { signIn, useSession } from "next-auth/react";
-import Head from "next/head";
-import Image from "next/image";
-import { useRouter } from "next/router";
+import { type NextPage } from 'next';
+import { signIn, useSession } from 'next-auth/react';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = () => {
   const session = useSession();
   const router = useRouter();
 
-  if (session.status === "authenticated") {
-    router.push("/app");
+  if (session.status === 'authenticated') {
+    router.push('/app');
   }
 
   const signInWithGoogle = () => {
-    signIn("google", { callbackUrl: "/app" });
+    signIn('google', { callbackUrl: '/app' });
   };
 
   return (
@@ -56,7 +56,7 @@ const Home: NextPage = () => {
               height={400}
             />
           </div>
-        </div>{" "}
+        </div>{' '}
       </main>
     </>
   );
