@@ -1,16 +1,16 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 export function Layout({ children }: { children: JSX.Element }) {
   return (
     <>
       <header className="navbar bg-base-300">
-        <Link href={"/app"} className="btn-ghost btn text-xl normal-case">
+        <Link href={'/app'} className="btn-ghost btn text-xl normal-case">
           Home budget
         </Link>
         <div className="w-full justify-end gap-3 pr-3">
-          <Link href={"/app/categories"}>Kategorie</Link>
-          <Link href={"/app/expenses"}>Wydatki</Link>
-          <Link href={"/app/monthlySum"}>Podsumowanie</Link>
+          <Link href={'/app/categories'}>Kategorie</Link>
+          <Link href={'/app/expenses'}>Wydatki</Link>
+          <Link href={'/app/monthlySum'}>Podsumowanie</Link>
         </div>
       </header>
       {children}

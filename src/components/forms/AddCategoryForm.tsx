@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 
 export type AddCategoryInterface = {
   categoryName: string;
@@ -26,7 +26,7 @@ export const AddCategoryForm = ({
           type="text"
           placeholder="np. Jedzenie"
           className="input mb-5 w-full max-w-xs"
-          {...register("categoryName")}
+          {...register('categoryName')}
         />
       </div>
       <div className="w-xs form-control">
@@ -34,7 +34,7 @@ export const AddCategoryForm = ({
         <div className="flex">
           <label htmlFor="red" className="label cursor-pointer px-3">
             <input
-              {...register("categoryColor")}
+              {...register('categoryColor')}
               value="red"
               type="radio"
               id="red"
@@ -43,7 +43,7 @@ export const AddCategoryForm = ({
           </label>
           <label htmlFor="blue" className="label cursor-pointer px-3">
             <input
-              {...register("categoryColor")}
+              {...register('categoryColor')}
               value="blue"
               type="radio"
               id="blue"
@@ -52,7 +52,7 @@ export const AddCategoryForm = ({
           </label>
           <label htmlFor="green" className="label cursor-pointer px-3">
             <input
-              {...register("categoryColor")}
+              {...register('categoryColor')}
               value="green"
               type="radio"
               id="green"

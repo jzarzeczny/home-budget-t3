@@ -1,10 +1,11 @@
-import { Instruction } from "@components/common/Instruction";
-import type { AddCategoryInterface } from "@components/forms/AddCategoryForm";
-import { AddCategoryForm } from "@components/forms/AddCategoryForm";
-import { type NextPage } from "next";
-import { api } from "@utils/api";
-import { CategoryTable } from "@components/CategoriesComponents/CategoryTable";
-import { Layout } from "@components/Layout";
+import { type NextPage } from 'next';
+
+import { CategoryTable } from '@components/CategoriesComponents/CategoryTable';
+import { Layout } from '@components/Layout';
+import { Instruction } from '@components/common/Instruction';
+import type { AddCategoryInterface } from '@components/forms/AddCategoryForm';
+import { AddCategoryForm } from '@components/forms/AddCategoryForm';
+import { api } from '@utils/api';
 
 const App: NextPage = () => {
   const categoryData = api.categories.getAllCategories.useQuery();

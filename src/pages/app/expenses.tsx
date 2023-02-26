@@ -1,16 +1,17 @@
-import { type NextPage } from "next";
-import { Layout } from "@components/Layout";
-import { Instruction } from "@components/common/Instruction";
-import { api } from "@utils/api";
-import { AddExpenseForm } from "@components/forms/AddExpenseForm";
-import { Heading } from "@components/common/Heading";
-import Link from "next/link";
-import { AddExpenseFileForm } from "@components/forms/AddExpenseFileForm";
-import type { MouseEvent } from "react";
-import { useState } from "react";
-import type { TransactionInterface } from "@utils/csvParsers";
-import type { Expenses } from "@prisma/client";
-import ExpensesCard from "@components/cards/ExpensesCard";
+import { type NextPage } from 'next';
+import Link from 'next/link';
+import type { MouseEvent } from 'react';
+import { useState } from 'react';
+
+import { Layout } from '@components/Layout';
+import ExpensesCard from '@components/cards/ExpensesCard';
+import { Heading } from '@components/common/Heading';
+import { Instruction } from '@components/common/Instruction';
+import { AddExpenseFileForm } from '@components/forms/AddExpenseFileForm';
+import { AddExpenseForm } from '@components/forms/AddExpenseForm';
+import type { Expenses } from '@prisma/client';
+import { api } from '@utils/api';
+import type { TransactionInterface } from '@utils/csvParsers';
 
 const App: NextPage = () => {
   const [expensesData, setExpensesData] = useState<TransactionInterface[]>([]);
@@ -38,14 +39,14 @@ const App: NextPage = () => {
         return;
       }
 
-      const expenseData: Omit<Expenses, "id" | "userId" | "createdAt"> = {
+      const expenseData: Omit<Expenses, 'id' | 'userId' | 'createdAt'> = {
         categoryId,
-        title: expense.title || "",
-        contractor: expense.contractor || "",
-        description: "now",
+        title: expense.title || '',
+        contractor: expense.contractor || '',
+        description: 'now',
         transactionDate: new Date(expense.transactionDate || new Date()),
         value: Number(expense.value) || 0,
-        currency: expense.currency || "PLN",
+        currency: expense.currency || 'PLN',
       };
 
       addExpense.mutate(expenseData);
@@ -79,7 +80,7 @@ const App: NextPage = () => {
               ? expensesData.map((expense, index) => (
                   <ExpensesCard expense={expense} key={index} />
                 ))
-              : "Nie masz wydatków, dodaj jakiś!"}
+              : 'Nie masz wydatków, dodaj jakiś!'}
           </div>
           <h3 className="py-8 text-center text-lg">Kategorie</h3>
           <div className="flex w-full flex-col gap-3  p-5 lg:flex-row">
@@ -96,7 +97,7 @@ const App: NextPage = () => {
             ) : (
               <div>
                 <p>You dont have any categoires</p>
-                <Link className="text-blue-500" href={"/categories"}>
+                <Link className="text-blue-500" href={'/categories'}>
                   Add categories
                 </Link>
               </div>
@@ -104,7 +105,7 @@ const App: NextPage = () => {
           </div>
         </section>
         <section>
-          <Heading text={"Tabela wydatków"} />
+          <Heading text={'Tabela wydatków'} />
           {expenses?.length ? (
             <div className="overflow-x-auto">
               <table className="table w-full">
@@ -122,7 +123,7 @@ const App: NextPage = () => {
                   {expenses?.map((expense) => (
                     <tr key={expense.id}>
                       <th>
-                        {expense.transactionDate.toLocaleDateString("pl-PL")}
+                        {expense.transactionDate.toLocaleDateString('pl-PL')}
                       </th>
                       <td>{expense.title}</td>
                       <td>{expense.contractor}</td>

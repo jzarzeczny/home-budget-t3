@@ -1,6 +1,7 @@
-import type { TransactionInterface } from "@utils/csvParsers";
-import type { Dispatch, SetStateAction } from "react";
-import { useForm } from "react-hook-form";
+import type { Dispatch, SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
+
+import type { TransactionInterface } from '@utils/csvParsers';
 
 interface FormSubmission {
   title: string;
@@ -39,7 +40,7 @@ export const AddExpenseForm = ({
           type="text"
           placeholder="np. "
           className="input-bordered input mb-5 w-full max-w-xs"
-          {...register("title")}
+          {...register('title')}
         />
       </div>
       <div className="form-control w-full">
@@ -48,7 +49,7 @@ export const AddExpenseForm = ({
           type="text"
           placeholder="np. Biedronka"
           className="input-bordered  input mb-5 w-full max-w-xs"
-          {...register("contractor")}
+          {...register('contractor')}
         />
       </div>
       <div className="form-control w-full">
@@ -56,7 +57,7 @@ export const AddExpenseForm = ({
         <textarea
           placeholder="np. Dziecięce ubranka"
           className="textarea-bordered textarea mb-5 w-full max-w-xs"
-          {...register("description")}
+          {...register('description')}
         />
       </div>
       <div className="form-control w-full">
@@ -64,7 +65,7 @@ export const AddExpenseForm = ({
         <input
           type="date"
           className="input-bordered  input mb-5 w-full max-w-xs"
-          {...register("transactionDate")}
+          {...register('transactionDate')}
         />
       </div>
       <div className="form-control w-full">
@@ -74,17 +75,17 @@ export const AddExpenseForm = ({
             <input
               type="number"
               className="input-bordered  input mb-5 w-full max-w-xs"
-              {...register("value")}
+              {...register('value')}
             />
           </div>
           <div className="form-control">
             <label className="mb-3 self-start">Kwota</label>
             <select
               className="input-bordered  input mb-5 w-full max-w-xs"
-              defaultValue={"pln"}
-              {...register("currency")}
+              defaultValue={'pln'}
+              {...register('currency')}
             >
-              <option value={"pln"}>PLN</option>
+              <option value={'pln'}>PLN</option>
             </select>
           </div>
         </div>

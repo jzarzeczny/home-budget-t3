@@ -5,9 +5,14 @@
   "scripts": {
     "build": "next build",
     "dev": "next dev",
-    "postinstall": "npx prisma generate",
-    "lint": "next lint",
-    "start": "next start"
+    "postinstall": "npx prisma generate && husky install",
+    "start": "next start",
+    "lint:all": "concurrently 'pnpm run lint' 'pnpm run prettier'",
+    "lint": "eslint --max-warnings 3 **/*.{ts,tsx,mjs} ",
+    "prettier": "prettier --check --end-of-line auto **/*.{ts,tsx,mjs}",
+    "tool:fix:all": "concurrently 'pnpm run tool:fix:lint' 'pnpm run tool:fix:prettier' ",
+    "tool:fix:lint": "eslint --fix **/*.{ts,tsx,mjs}",
+    "tool:fix:prettier": "prettier --write --end-of-line auto **/*.{ts,tsx,mjs}"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -31,6 +36,7 @@
     "zustand": "^4.2.0"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/node": "^18.11.18",
     "@types/papaparse": "^5.3.7",
     "@types/prettier": "^2.7.2",
@@ -39,8 +45,10 @@
     "@typescript-eslint/eslint-plugin": "^5.47.1",
     "@typescript-eslint/parser": "^5.47.1",
     "autoprefixer": "^10.4.7",
+    "concurrently": "^7.6.0",
     "eslint": "^8.30.0",
     "eslint-config-next": "13.1.1",
+    "husky": "^8.0.3",
     "postcss": "^8.4.14",
     "prettier": "^2.8.1",
     "prettier-plugin-tailwindcss": "^0.2.1",

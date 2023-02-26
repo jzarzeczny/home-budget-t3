@@ -1,11 +1,12 @@
-import { parseCSV } from "@utils/csvParsers";
-import type { TransactionInterface } from "@utils/csvParsers";
-import { useForm } from "react-hook-form";
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from 'react';
+import { useForm } from 'react-hook-form';
+
+import { parseCSV } from '@utils/csvParsers';
+import type { TransactionInterface } from '@utils/csvParsers';
 
 export enum BankType {
-  ING = "ing",
-  CA = "ca",
+  ING = 'ing',
+  CA = 'ca',
 }
 
 export interface AddExpenseFileFormInterface {
@@ -41,17 +42,17 @@ export const AddExpenseFileForm = ({
           type="file"
           className="file-input-bordered file-input-primary file-input w-full max-w-xs"
           accept=".csv"
-          {...register("file")}
+          {...register('file')}
         />
       </div>
       <div className="form-control w-full">
         <label className="label">Wybierz bank</label>
         <select
           className="select-primary select w-full max-w-xs"
-          defaultValue={"default"}
-          {...register("type")}
+          defaultValue={'default'}
+          {...register('type')}
         >
-          <option value={"default"} disabled>
+          <option value={'default'} disabled>
             Wybierz bank
           </option>
           <option value={BankType.ING}>ING</option>
