@@ -1,9 +1,6 @@
 import { Instruction } from "@components/common/Instruction";
-import type {
-  AddCategoryInterface} from "@components/forms/AddCategoryForm";
-import {
-  AddCategoryForm
-} from "@components/forms/AddCategoryForm";
+import type { AddCategoryInterface } from "@components/forms/AddCategoryForm";
+import { AddCategoryForm } from "@components/forms/AddCategoryForm";
 import { type NextPage } from "next";
 import { api } from "@utils/api";
 import { CategoryTable } from "@components/CategoriesComponents/CategoryTable";
@@ -42,6 +39,8 @@ const App: NextPage = () => {
       utils.categories.getAllCategories.invalidate();
     },
   });
+
+  console.log(categoryData.data);
 
   const setRemoveCategory = (categoryId: string) => {
     removeCategory.mutate(categoryId);

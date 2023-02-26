@@ -3,9 +3,14 @@ import type { TransactionInterface } from "@utils/csvParsers";
 import { useForm } from "react-hook-form";
 import type { Dispatch, SetStateAction } from "react";
 
-interface AddExpenseFileFormInterface {
+export enum BankType {
+  ING = "ing",
+  CA = "ca",
+}
+
+export interface AddExpenseFileFormInterface {
   file: File[];
-  type: string;
+  type: BankType;
 }
 
 export const AddExpenseFileForm = ({
@@ -16,10 +21,12 @@ export const AddExpenseFileForm = ({
   const { register, handleSubmit } = useForm<AddExpenseFileFormInterface>();
 
   const onSubmit = async (data: AddExpenseFileFormInterface) => {
-    const { file } = data;
-    if (file[0]) {
-      const data = (await parseCSV(file[0])) as TransactionInterface[];
-      setExpenses((prev: TransactionInterface[]) => [...prev, ...data]);
+    if (data.file[0]) {
+      const parsedData = (await parseCSV(
+        data.file[0],
+        data.type
+      )) as TransactionInterface[];
+      setExpenses((prev: TransactionInterface[]) => [...prev, ...parsedData]);
     }
   };
 
@@ -47,8 +54,8 @@ export const AddExpenseFileForm = ({
           <option value={"default"} disabled>
             Wybierz bank
           </option>
-          <option value={"ing"}>ING</option>
-          <option value={"ca"}>Credit Agricole</option>
+          <option value={BankType.ING}>ING</option>
+          <option value={BankType.CA}>Credit Agricole</option>
         </select>
       </div>
       <input

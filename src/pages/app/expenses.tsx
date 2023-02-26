@@ -19,7 +19,7 @@ const App: NextPage = () => {
 
   const addExpense = api.expenses.addExpense.useMutation({
     onSettled() {
-      utils.expenses.getAllExpenses.invalidate();
+      utils.expenses.expensesWithCategory.invalidate();
     },
   });
 
@@ -44,9 +44,8 @@ const App: NextPage = () => {
         contractor: expense.contractor || "",
         description: "now",
         transactionDate: new Date(expense.transactionDate || new Date()),
-
         value: Number(expense.value) || 0,
-        currency: expense.currency || "pln",
+        currency: expense.currency || "PLN",
       };
 
       addExpense.mutate(expenseData);
@@ -73,7 +72,7 @@ const App: NextPage = () => {
             <AddExpenseFileForm setExpenses={setExpensesData} />
           </div>
         </section>
-        <section className="w-full p-5">
+        <section className="w-full p-5 ">
           <Heading text="Katagoryzuj wydatek" />
           <div className="stack ml-auto w-full">
             {expensesData.length
@@ -83,7 +82,7 @@ const App: NextPage = () => {
               : "Nie masz wydatków, dodaj jakiś!"}
           </div>
           <h3 className="py-8 text-center text-lg">Kategorie</h3>
-          <div className="flex w-full flex-col gap-3 p-5 lg:flex-row">
+          <div className="flex w-full flex-col gap-3  p-5 lg:flex-row">
             {categories?.length ? (
               categories.map((category) => (
                 <button
@@ -106,33 +105,37 @@ const App: NextPage = () => {
         </section>
         <section>
           <Heading text={"Tabela wydatków"} />
-          <div className="overflow-x-auto">
-            <table className="table w-full">
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Tytuł</th>
-                  <th>Miejsce</th>
-                  <th>Kategoria</th>
-                  <th>Kwota</th>
-                  <th>Akcja</th>
-                </tr>
-              </thead>
-              <tbody>
-                {expenses?.map((expense) => (
-                  <tr key={expense.id}>
-                    <th>
-                      {expense.transactionDate.toLocaleDateString("pl-PL")}
-                    </th>
-                    <td>{expense.title}</td>
-                    <td>{expense.contractor}</td>
-                    <td>{expense.category?.categoryName}</td>
-                    <td>{`${expense.value}${expense.currency}`}</td>
+          {expenses?.length ? (
+            <div className="overflow-x-auto">
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Tytuł</th>
+                    <th>Miejsce</th>
+                    <th>Kategoria</th>
+                    <th>Kwota</th>
+                    <th>Akcja</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {expenses?.map((expense) => (
+                    <tr key={expense.id}>
+                      <th>
+                        {expense.transactionDate.toLocaleDateString("pl-PL")}
+                      </th>
+                      <td>{expense.title}</td>
+                      <td>{expense.contractor}</td>
+                      <td>{expense.category?.categoryName}</td>
+                      <td>{`${expense.value}${expense.currency}`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>Nie masz wydatków</p>
+          )}
         </section>
       </main>
     </Layout>

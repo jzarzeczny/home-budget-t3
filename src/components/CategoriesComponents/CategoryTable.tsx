@@ -13,19 +13,25 @@ const CategoryRow = ({
   categoryData: Categories;
   removeCategory: (categoryId: string) => void;
 }) => {
+  console.log(categoryData);
   return (
     <tr className="flex w-full">
-      <th className="w-full">
+      <th className="flex-1">
         <p
-          className={`rounded-md bg-${categoryData.categoryColor}-500 p-2 text-center font-normal text-white`}
+          className={`rounded-md bg-${categoryData.categoryColor}-500 p-2 font-normal `}
         >
           {categoryData.categoryName}
         </p>
       </th>
-      <td>
-        <button className="btn" onClick={() => removeCategory(categoryData.id)}>
-          Usuń
-        </button>
+      <td className="flex-1">
+        <div className="flex w-full">
+          <button
+            className="flex-start btn"
+            onClick={() => removeCategory(categoryData.id)}
+          >
+            Usuń
+          </button>
+        </div>
       </td>
     </tr>
   );
