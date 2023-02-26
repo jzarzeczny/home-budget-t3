@@ -1,12 +1,15 @@
+import type { CategoriesWithValues } from 'types/Categories';
 import { z } from 'zod';
 
-import type { Categories } from '@prisma/client';
+import type { Categories, Expenses } from '@prisma/client';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-interface CategoriesWithValues extends Partial<Categories> {
-  value: number;
-}
+// interface CategoriesWithValues extends Omit<Categories, 'id'> {
+//   value: number;
+// }
+
+export const NO_CATEGORY = 'noCategory';
 
 export const expensesRouter = createTRPCRouter({
   getAllExpenses: protectedProcedure.query(({ ctx }) => {
@@ -53,17 +56,46 @@ export const expensesRouter = createTRPCRouter({
           category: true,
         },
       });
-      const categories: any = [
-        ...new Set(data.map((expense) => expense.category)),
-      ].reduce((acc: any, cur: any) => {
-        if (cur?.id) {
-          return { ...acc, [cur?.id]: { ...cur, value: 0 } };
-        }
-      }, {} as CategoriesWithValues);
+
+      const expenseCategories = reduceToUniqueCategories(data);
+
+      const categories = expenseCategories.reduce(
+        (acc: CategoriesWithValues, currentValue: Categories) => {
+          return {
+            ...acc,
+            [currentValue.id]: { ...currentValue, value: 0 },
+          };
+        },
+        {}
+      );
+
+      categories[NO_CATEGORY] = {
+        id: NO_CATEGORY,
+        categoryName: '',
+        categoryColor: 'pink',
+        userId: ctx.session.user.id,
+        value: 0,
+      };
+
       const expenses = data.map((expense) => {
-        categories[expense.categoryId].value += expense.value;
+        if (expense.categoryId) {
+          categories[expense.categoryId]!.value += expense.value;
+          return expense;
+        }
+        categories['NO_CATEGORY']!.value += expense.value;
         return expense;
       });
+
+      //   const expenses = data.map((expense) => {
+      //     if (
+      //       expense.categoryId &&
+      //       categories.hasOwnProperty(expense.categoryId)
+      //     ) {
+      //       return (categories[expense.categoryId].value += expense.value);
+      //     }
+
+      //     return (categories[NO_CATEGORY].value = expense.value);
+      //   });
 
       return { categories, expenses };
     }),
@@ -90,3 +122,19 @@ export const expensesRouter = createTRPCRouter({
       });
     }),
 });
+
+const reduceToUniqueCategories = (
+  data: (Expenses & {
+    category: Categories | null;
+  })[]
+): Categories[] => {
+  const uniqueCategories = [
+    ...new Set(data.map((expense) => expense.category)),
+  ];
+  return uniqueCategories.filter(notEmpty);
+};
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  if (value === null || value === undefined) return false;
+  return true;
+}

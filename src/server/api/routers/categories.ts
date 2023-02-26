@@ -31,11 +31,22 @@ export const categoriesRouter = createTRPCRouter({
 
   removeCategory: protectedProcedure
     .input(z.string())
-    .mutation(({ input, ctx }) => {
-      return ctx.prisma.categories.delete({
-        where: {
-          id: input,
-        },
-      });
+    .mutation(async ({ input, ctx }) => {
+      return await prisma?.$transaction([
+        ctx.prisma.categories.delete({
+          where: {
+            id: input,
+          },
+        }),
+        ctx.prisma.expenses.updateMany({
+          data: {
+            categoryId: null,
+          },
+          where: {
+            categoryId: input,
+            userId: ctx.session.user.id,
+          },
+        }),
+      ]);
     }),
 });
