@@ -5,10 +5,6 @@ import type { Categories, Expenses } from '@prisma/client';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-// interface CategoriesWithValues extends Omit<Categories, 'id'> {
-//   value: number;
-// }
-
 export const NO_CATEGORY = 'noCategory';
 
 export const expensesRouter = createTRPCRouter({
@@ -93,17 +89,6 @@ export const expensesRouter = createTRPCRouter({
 
         return expense;
       });
-
-      //   const expenses = data.map((expense) => {
-      //     if (
-      //       expense.categoryId &&
-      //       categories.hasOwnProperty(expense.categoryId)
-      //     ) {
-      //       return (categories[expense.categoryId].value += expense.value);
-      //     }
-
-      //     return (categories[NO_CATEGORY].value = expense.value);
-      //   });
 
       return { categories, expenses };
     }),
