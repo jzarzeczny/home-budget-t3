@@ -71,18 +71,26 @@ export const expensesRouter = createTRPCRouter({
 
       categories[NO_CATEGORY] = {
         id: NO_CATEGORY,
-        categoryName: '',
+        categoryName: 'Brak kategorii',
         categoryColor: 'pink',
         userId: ctx.session.user.id,
         value: 0,
       };
 
       const expenses = data.map((expense) => {
-        if (expense.categoryId) {
-          categories[expense.categoryId]!.value += expense.value;
-          return expense;
+        const id = expense.categoryId;
+        const categoryWithoutId = categories[NO_CATEGORY];
+
+        if (id) {
+          const category = categories[id];
+          if (category !== undefined) {
+            category.value += expense.value;
+          }
         }
-        categories['NO_CATEGORY']!.value += expense.value;
+        if (categoryWithoutId) {
+          categoryWithoutId.value += expense.value;
+        }
+
         return expense;
       });
 
