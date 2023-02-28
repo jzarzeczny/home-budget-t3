@@ -1,12 +1,11 @@
+import type { CategoriesWithValues } from 'types/Categories';
 import { z } from 'zod';
 
-import type { Categories } from '@prisma/client';
+import type { Categories, Expenses } from '@prisma/client';
 
 import { createTRPCRouter, protectedProcedure } from '../trpc';
 
-interface CategoriesWithValues extends Partial<Categories> {
-  value: number;
-}
+export const NO_CATEGORY = 'noCategory';
 
 export const expensesRouter = createTRPCRouter({
   getAllExpenses: protectedProcedure.query(({ ctx }) => {
@@ -53,15 +52,41 @@ export const expensesRouter = createTRPCRouter({
           category: true,
         },
       });
-      const categories: any = [
-        ...new Set(data.map((expense) => expense.category)),
-      ].reduce((acc: any, cur: any) => {
-        if (cur?.id) {
-          return { ...acc, [cur?.id]: { ...cur, value: 0 } };
-        }
-      }, {} as CategoriesWithValues);
+
+      const expenseCategories = reduceToUniqueCategories(data);
+
+      const categories = expenseCategories.reduce(
+        (acc: CategoriesWithValues, currentValue: Categories) => {
+          return {
+            ...acc,
+            [currentValue.id]: { ...currentValue, value: 0 },
+          };
+        },
+        {}
+      );
+
+      categories[NO_CATEGORY] = {
+        id: NO_CATEGORY,
+        categoryName: 'Brak kategorii',
+        categoryColor: 'pink',
+        userId: ctx.session.user.id,
+        value: 0,
+      };
+
       const expenses = data.map((expense) => {
-        categories[expense.categoryId].value += expense.value;
+        const id = expense.categoryId;
+        const categoryWithoutId = categories[NO_CATEGORY];
+
+        if (id) {
+          const category = categories[id];
+          if (category !== undefined) {
+            category.value += expense.value;
+          }
+        }
+        if (categoryWithoutId) {
+          categoryWithoutId.value += expense.value;
+        }
+
         return expense;
       });
 
@@ -74,7 +99,7 @@ export const expensesRouter = createTRPCRouter({
         title: z.string(),
         contractor: z.string(),
         description: z.string(),
-        categoryId: z.string(),
+        categoryId: z.string().nullish(),
         transactionDate: z.date(),
         value: z.number(),
         currency: z.string(),
@@ -90,3 +115,19 @@ export const expensesRouter = createTRPCRouter({
       });
     }),
 });
+
+const reduceToUniqueCategories = (
+  data: (Expenses & {
+    category: Categories | null;
+  })[]
+): Categories[] => {
+  const uniqueCategories = [
+    ...new Set(data.map((expense) => expense.category)),
+  ];
+  return uniqueCategories.filter(notEmpty);
+};
+
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  if (value === null || value === undefined) return false;
+  return true;
+}

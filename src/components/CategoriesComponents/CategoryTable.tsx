@@ -14,7 +14,6 @@ const CategoryRow = ({
   categoryData: Categories;
   removeCategory: (categoryId: string) => void;
 }) => {
-  console.log(categoryData);
   return (
     <tr className="flex w-full">
       <th className="flex-1">

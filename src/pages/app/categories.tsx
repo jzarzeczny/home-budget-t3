@@ -41,8 +41,6 @@ const App: NextPage = () => {
     },
   });
 
-  console.log(categoryData.data);
-
   const setRemoveCategory = (categoryId: string) => {
     removeCategory.mutate(categoryId);
   };
