@@ -99,7 +99,7 @@ export const expensesRouter = createTRPCRouter({
         title: z.string(),
         contractor: z.string(),
         description: z.string(),
-        categoryId: z.string(),
+        categoryId: z.string().nullish(),
         transactionDate: z.date(),
         value: z.number(),
         currency: z.string(),
