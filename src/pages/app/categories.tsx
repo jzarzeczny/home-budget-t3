@@ -1,10 +1,13 @@
 import { type NextPage } from 'next';
 
 import { CategoryTable } from '@components/CategoriesComponents/CategoryTable';
-import { Layout } from '@components/Layout';
+import { Divider } from '@components/common/Divider';
+import { SectionHeading } from '@components/common/Heading';
 import { Instruction } from '@components/common/Instruction';
+import { Section } from '@components/common/Section';
 import type { AddCategoryInterface } from '@components/forms/AddCategoryForm';
 import { AddCategoryForm } from '@components/forms/AddCategoryForm';
+import { Layout } from '@components/layout/Layout';
 import { api } from '@utils/api';
 
 const App: NextPage = () => {
@@ -15,7 +18,6 @@ const App: NextPage = () => {
     async onMutate() {
       await utils.categories.getAllCategories.cancel();
     },
-    //On successful call, fetch the data
     onSettled() {
       utils.categories.getAllCategories.invalidate();
     },
@@ -52,25 +54,27 @@ const App: NextPage = () => {
   return (
     <Layout>
       <main className=" h-full gap-4 overflow-hidden">
-        <div className="grid grid-cols-1 bg-base-200 pb-8 xl:auto-rows-min xl:grid-cols-4">
+        <div className="grid grid-cols-1 bg-base-200  xl:auto-rows-min xl:grid-cols-4">
           <Instruction />
 
-          <div className="divider lg:hidden"></div>
-          <div className="lg:col-start-1 lg:col-end-3 lg:row-start-2">
-            <h3 className="pt-5 pb-8 text-center text-xl">
-              Dodaj nową kategorie
-            </h3>
+          <Divider />
+          <Section alignment="lg:col-start-1 lg:col-end-3 lg:row-start-2">
+            <SectionHeading>Dodaj nową kategorie</SectionHeading>
             <AddCategoryForm onSubmit={setAddCategory} />
-          </div>
-          <div className="divider lg:hidden "></div>
-          {categoryData.data ? (
-            <CategoryTable
-              categories={categoryData.data}
-              removeCategory={setRemoveCategory}
-            />
-          ) : (
-            <div className="loading" />
-          )}
+          </Section>
+          <Divider />
+          <Section alignment="lg:col-start-3 lg:col-end-5 lg:row-start-2">
+            <SectionHeading>Kategorie</SectionHeading>
+
+            {categoryData.data ? (
+              <CategoryTable
+                categories={categoryData.data}
+                removeCategory={setRemoveCategory}
+              />
+            ) : (
+              <div className="loading" />
+            )}
+          </Section>
         </div>
       </main>
     </Layout>

@@ -3,12 +3,12 @@ import Link from 'next/link';
 import type { MouseEvent } from 'react';
 import { useState } from 'react';
 
-import { Layout } from '@components/Layout';
 import ExpensesCard from '@components/cards/ExpensesCard';
 import { Heading } from '@components/common/Heading';
 import { Instruction } from '@components/common/Instruction';
 import { AddExpenseFileForm } from '@components/forms/AddExpenseFileForm';
 import { AddExpenseForm } from '@components/forms/AddExpenseForm';
+import { Layout } from '@components/layout/Layout';
 import type { Expenses } from '@prisma/client';
 import { api } from '@utils/api';
 import type { TransactionInterface } from '@utils/csvParsers';
