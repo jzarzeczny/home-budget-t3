@@ -20,7 +20,7 @@ export const AddCategoryForm = ({
       onSubmit={handleSubmit(onS)}
       className="flex flex-col items-center px-8"
     >
-      <div className="form-control">
+      <div className="form-control w-full max-w-xs">
         <label className="mb-3 self-start">Nazwa kategorii</label>
         <input
           type="text"
@@ -29,9 +29,9 @@ export const AddCategoryForm = ({
           {...register('categoryName')}
         />
       </div>
-      <div className="w-xs form-control">
+      <div className="form-control max-w-xs flex ">
         <label className="mb-3 self-start">Kolor kategorii</label>
-        <div className="flex">
+        <div className="flex w-full max-w-xs flex-wrap">
           <label htmlFor="red" className="label cursor-pointer px-3">
             <input
               {...register('categoryColor')}
@@ -59,10 +59,50 @@ export const AddCategoryForm = ({
               className="radio checked:bg-green-500"
             />
           </label>
+          <label htmlFor="pink" className="label cursor-pointer px-3">
+            <input
+              {...register('categoryColor')}
+              value="pink"
+              type="radio"
+              id="pink"
+              className="radio checked:bg-pink-500"
+            />
+          </label>
+          <label htmlFor="orange" className="label cursor-pointer px-3">
+            <input
+              {...register('categoryColor')}
+              value="orange"
+              type="radio"
+              id="orange"
+              className="radio checked:bg-orange-500"
+            />
+          </label>
+          <label htmlFor="yellow" className="label cursor-pointer px-3">
+            <input
+              {...register('categoryColor')}
+              value="yellow"
+              type="radio"
+              id="yellow"
+              className="radio checked:bg-yellow-500"
+            />
+          </label>
+          <label htmlFor="violet" className="label cursor-pointer px-3">
+            <input
+              {...register('categoryColor')}
+              value="violet"
+              type="radio"
+              id="violet"
+              className="radio checked:bg-violet-500"
+            />
+          </label>
         </div>
       </div>
 
-      <input type="submit" value="Dodaj kategorie" className=" btn mt-3" />
+      <input
+        type="submit"
+        value="Dodaj kategorie"
+        className=" btn btn-sm mt-3"
+      />
     </form>
   );
 };
