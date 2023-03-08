@@ -8,8 +8,6 @@ export const Section = ({
   alignment: string;
 }) => {
   return (
-    <section className={`py-8 bg-slate-50 lg:bg-inherit ${alignment}`}>
-      {children}
-    </section>
+    <section className={`py-8  lg:bg-inherit ${alignment}`}>{children}</section>
   );
 };

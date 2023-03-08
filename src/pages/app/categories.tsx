@@ -54,11 +54,11 @@ const App: NextPage = () => {
   return (
     <Layout>
       <main className=" h-full gap-4 overflow-hidden">
-        <div className="grid grid-cols-1 bg-base-200  xl:auto-rows-min xl:grid-cols-4">
+        <div className="grid grid-cols-1 bg-base-200  lg:auto-rows-min lg:grid-cols-4">
           <Instruction />
 
           <Divider />
-          <Section alignment="lg:col-start-1 lg:col-end-3 lg:row-start-2">
+          <Section alignment=" bg-base-300 lg:col-start-1 lg:col-end-3 lg:row-start-2">
             <SectionHeading>Dodaj nową kategorie</SectionHeading>
             <AddCategoryForm onSubmit={setAddCategory} />
           </Section>
