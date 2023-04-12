@@ -7,6 +7,16 @@ import { createTRPCRouter, protectedProcedure } from '../trpc';
 
 export const NO_CATEGORY = 'noCategory';
 
+const newExpenseSchema = z.object({
+  title: z.string(),
+  contractor: z.string(),
+  description: z.string(),
+  categoryId: z.string().nullish(),
+  transactionDate: z.date(),
+  value: z.number(),
+  currency: z.string(),
+});
+
 export const expensesRouter = createTRPCRouter({
   getAllExpenses: protectedProcedure.query(({ ctx }) => {
     return ctx.prisma.expenses.findMany({
@@ -94,23 +104,35 @@ export const expensesRouter = createTRPCRouter({
     }),
 
   addExpense: protectedProcedure
-    .input(
-      z.object({
-        title: z.string(),
-        contractor: z.string(),
-        description: z.string(),
-        categoryId: z.string().nullish(),
-        transactionDate: z.date(),
-        value: z.number(),
-        currency: z.string(),
-      })
-    )
+    .input(newExpenseSchema)
     .mutation(({ input, ctx }) => {
       const userId = ctx.session.user.id;
       return ctx.prisma.expenses.create({
         data: {
           userId,
           ...input,
+        },
+      });
+    }),
+  addExpenses: protectedProcedure
+    .input(z.array(newExpenseSchema))
+    .mutation(({ input, ctx }) => {
+      const userId = ctx.session.user.id;
+      return ctx.prisma.expenses.createMany({
+        data: [...input.map((singleExpence) => ({ ...singleExpence, userId }))],
+      });
+    }),
+  updateExpenseCategory: protectedProcedure
+    .input(
+      z.object({ categoryId: z.string().nullable(), expenseId: z.string() })
+    )
+    .mutation(({ input, ctx }) => {
+      return ctx.prisma.expenses.update({
+        where: {
+          id: input.expenseId,
+        },
+        data: {
+          categoryId: input.categoryId || null,
         },
       });
     }),

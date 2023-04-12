@@ -10,7 +10,6 @@ export const Instruction = () => {
   const para = useRef<HTMLParagraphElement>(null);
 
   const toggleInstructions = () => {
-    console.log(open);
     if (!open) {
       para?.current?.classList.remove('h-0');
       para?.current?.classList.add('h-auto');
@@ -18,7 +17,6 @@ export const Instruction = () => {
       para?.current?.classList.remove('h-auto');
 
       para?.current?.classList.add(`h-[${height}]`);
-      console.log(para);
     } else {
       para?.current?.classList.add(`h-0`);
     }

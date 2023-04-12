@@ -1,14 +1,7 @@
 import { parse } from 'csv-parse/sync';
+import type { AddExpense } from 'types/Expenses';
 
 import { BankType } from '@components/forms/AddExpenseFileForm';
-
-export interface TransactionInterface {
-  transactionDate: string;
-  contractor: string;
-  title: string;
-  value: number;
-  currency: string;
-}
 
 export function parseCSV(csvFile: File, parserType: BankType) {
   const reader = new FileReader();
@@ -48,16 +41,15 @@ function encodeING(data: string) {
   );
 }
 
-function createArrayOfObjects(encodedCSV: string[][]): TransactionInterface[] {
-  const transactionData: TransactionInterface[] = encodedCSV.map(
-    (transaction) => ({
-      transactionDate: transaction[0] as string,
-      contractor: transaction[2] as string,
-      title: transaction[3] as string,
-      value: convertToJSnumberStyle(transaction[8] as string),
-      currency: transaction[9] as string,
-    })
-  );
+function createArrayOfObjects(encodedCSV: string[][]): AddExpense[] {
+  const transactionData: AddExpense[] = encodedCSV.map((transaction) => ({
+    transactionDate: transaction[0] as string,
+    contractor: transaction[2] as string,
+    title: transaction[3] as string,
+    description: '',
+    value: convertToJSnumberStyle(transaction[8] as string),
+    currency: transaction[9] as string,
+  }));
   return transactionData;
 }
 
@@ -69,9 +61,7 @@ function encodeCA(data: string) {
   );
 }
 
-function createArrayFromCAParse(
-  encodedCSV: string[][]
-): TransactionInterface[] {
+function createArrayFromCAParse(encodedCSV: string[][]): AddExpense[] {
   const transactionDateIndex = encodedCSV[0]?.indexOf(
     'Data operacji'
   ) as number;
@@ -83,24 +73,22 @@ function createArrayFromCAParse(
     'Kategoria transakcji'
   ) as number;
   const transferValueIndex = encodedCSV[0]?.lastIndexOf('Kwota') as number;
-  const transactionData: TransactionInterface[] = encodedCSV.map(
-    (transaction) => ({
-      transactionDate: transaction[transactionDateIndex] as string,
-      contractor: transaction[contractorIndex] as string,
-      title: transaction[titleIndex]
-        ? (transaction[titleIndex] as string)
-        : (transaction[transactionTypeIndex] as string),
-
-      value: convertToJSnumberStyle(
-        (transaction[transferValueIndex] as unknown as string).split(
-          ' '
-        )[0] as string
-      ) as number,
-      currency: (transaction[transferValueIndex] as unknown as string).split(
+  const transactionData: AddExpense[] = encodedCSV.map((transaction) => ({
+    transactionDate: transaction[transactionDateIndex] as string,
+    contractor: transaction[contractorIndex] as string,
+    title: transaction[titleIndex]
+      ? (transaction[titleIndex] as string)
+      : (transaction[transactionTypeIndex] as string),
+    description: '',
+    value: convertToJSnumberStyle(
+      (transaction[transferValueIndex] as unknown as string).split(
         ' '
-      )[1] as string,
-    })
-  );
+      )[0] as string
+    ) as number,
+    currency: (transaction[transferValueIndex] as unknown as string).split(
+      ' '
+    )[1] as string,
+  }));
   return transactionData.splice(1);
 }
 

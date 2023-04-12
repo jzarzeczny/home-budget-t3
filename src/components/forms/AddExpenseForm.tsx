@@ -1,40 +1,23 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
-
-import type { TransactionInterface } from '@utils/csvParsers';
-
-interface FormSubmission {
-  title: string;
-  contractor: string;
-  description: string;
-  transactionDate: string;
-  value: number;
-  currency: string;
-}
+import type { AddExpense } from 'types/Expenses';
 
 export const AddExpenseForm = ({
   setExpense,
 }: {
-  setExpense: Dispatch<SetStateAction<TransactionInterface[]>>;
+  setExpense: (data: AddExpense | AddExpense[]) => void;
 }) => {
-  const { register, handleSubmit } = useForm<FormSubmission>();
+  const { register, handleSubmit } = useForm<AddExpense>();
 
-  const onSubmit = async (data: FormSubmission) => {
-    setExpense((prev: TransactionInterface[]) => [
-      ...prev,
-      {
-        ...data,
-        description: data.description,
-      },
-    ]);
+  const onSubmit = async (data: AddExpense) => {
+    setExpense(data);
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="outline-neutral-300 flex w-full flex-col items-center justify-center p-8"
+      className="outline-neutral-300 flex w-full flex-col items-center justify-center p-2 lg:p-8"
     >
-      <div className="form-control w-full">
+      <div className="form-control w-full max-w-xs">
         <label className="mb-3 self-start">Tytuł</label>
         <input
           type="text"
@@ -43,7 +26,7 @@ export const AddExpenseForm = ({
           {...register('title')}
         />
       </div>
-      <div className="form-control w-full">
+      <div className="form-control w-full max-w-xs">
         <label className="mb-3 self-start">Miejsce</label>
         <input
           type="text"
@@ -52,7 +35,7 @@ export const AddExpenseForm = ({
           {...register('contractor')}
         />
       </div>
-      <div className="form-control w-full">
+      <div className="form-control w-full max-w-xs">
         <label className="mb-3 self-start">Opis</label>
         <textarea
           placeholder="np. Dziecięce ubranka"
@@ -60,21 +43,21 @@ export const AddExpenseForm = ({
           {...register('description')}
         />
       </div>
-      <div className="form-control w-full">
-        <label className="mb-3 self-start">Data</label>
+      <div className="form-control w-full max-w-xs">
+        <label className="mb-3 self-center ">Data</label>
         <input
           type="date"
-          className="input-bordered  input mb-5 w-full max-w-xs"
+          className="input-bordered self-center  input mb-5 w-full max-w-xs "
           {...register('transactionDate')}
         />
       </div>
-      <div className="form-control w-full">
-        <div className="center flex w-full items-center">
+      <div className="form-control w-full max-w-xs">
+        <div className="center flex w-full align-baseline m-0 p-0">
           <div className="form-control">
             <label className="mb-3 self-start">Kwota</label>
             <input
               type="number"
-              className="input-bordered  input mb-5 w-full max-w-xs"
+              className="input-bordered  input mb-5 w-full "
               {...register('value')}
             />
           </div>
@@ -94,7 +77,7 @@ export const AddExpenseForm = ({
       <input
         type="submit"
         value="Dodaj wydatek"
-        className=" btn mt-3 w-full max-w-xs self-start"
+        className=" btn mt-3 w-full max-w-xs"
       />
     </form>
   );

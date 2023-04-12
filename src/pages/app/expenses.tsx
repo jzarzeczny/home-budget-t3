@@ -1,21 +1,18 @@
 import { type NextPage } from 'next';
-import Link from 'next/link';
-import type { MouseEvent } from 'react';
-import { useState } from 'react';
+import Head from 'next/head';
+import type { AddExpense } from 'types/Expenses';
 
-import ExpensesCard from '@components/cards/ExpensesCard';
 import { Heading } from '@components/common/Heading';
 import { Instruction } from '@components/common/Instruction';
+import { Section } from '@components/common/Section';
 import { AddExpenseFileForm } from '@components/forms/AddExpenseFileForm';
 import { AddExpenseForm } from '@components/forms/AddExpenseForm';
+import { SelectForm } from '@components/forms/SelectForm';
 import { Layout } from '@components/layout/Layout';
 import type { Expenses } from '@prisma/client';
 import { api } from '@utils/api';
-import type { TransactionInterface } from '@utils/csvParsers';
 
 const App: NextPage = () => {
-  const [expensesData, setExpensesData] = useState<TransactionInterface[]>([]);
-
   const utils = api.useContext();
 
   const addExpense = api.expenses.addExpense.useMutation({
@@ -24,122 +21,110 @@ const App: NextPage = () => {
     },
   });
 
-  const { data: categories } = api.categories.getAllCategories.useQuery();
+  const addExpenses = api.expenses.addExpenses.useMutation({
+    onSettled() {
+      utils.expenses.expensesWithCategory.invalidate();
+    },
+  });
+
+  const categoriesData = api.categories.getAllCategories.useQuery();
 
   const { data: expenses } = api.expenses.expensesWithCategory.useQuery();
 
-  const addCostToCategory = (
-    e: MouseEvent<HTMLButtonElement>,
-    categoryId: string
-  ) => {
-    if (categories?.length) {
-      const expense = expensesData.shift();
+  const addCostToCategory = (data: AddExpense | AddExpense[]) => {
+    console.log(data);
+    if (Array.isArray(data)) {
+      const expensesData: Omit<Expenses, 'id' | 'userId' | 'createdAt'>[] =
+        data.map((singleExpense) => ({
+          categoryId: null,
+          title: singleExpense.title || '',
+          contractor: singleExpense.contractor || '',
+          description: 'now',
+          transactionDate: new Date(
+            singleExpense.transactionDate || new Date()
+          ),
+          value: Number(singleExpense.value) || 0,
+          currency: singleExpense.currency || 'PLN',
+        }));
 
-      if (!expense) {
-        return;
-      }
-
-      const expenseData: Omit<Expenses, 'id' | 'userId' | 'createdAt'> = {
-        categoryId,
-        title: expense.title || '',
-        contractor: expense.contractor || '',
-        description: 'now',
-        transactionDate: new Date(expense.transactionDate || new Date()),
-        value: Number(expense.value) || 0,
-        currency: expense.currency || 'PLN',
-      };
-
-      addExpense.mutate(expenseData);
-      setExpensesData((prev: TransactionInterface[] | undefined) => {
-        if (prev?.length) {
-          const newExpensesData = [...prev];
-          newExpensesData.shift();
-          return newExpensesData;
-        }
-        return [];
-      });
+      return addExpenses.mutate(expensesData);
     }
+
+    const expenseData: Omit<Expenses, 'id' | 'userId' | 'createdAt'> = {
+      categoryId: null,
+      title: data.title || '',
+      contractor: data.contractor || '',
+      description: 'now',
+      transactionDate: new Date(data.transactionDate || new Date()),
+      value: Number(data.value) || 0,
+      currency: data.currency || 'PLN',
+    };
+
+    return addExpense.mutate(expenseData);
   };
 
   return (
-    <Layout>
-      <main className=" h-full gap-4 overflow-hidden">
-        <Instruction />
-        <section>
-          <Heading text="Dodaj wydatki" />
-          <AddExpenseForm setExpense={setExpensesData} />
-          <Heading text="Importuj wydatki" />
-          <div className="flex items-center justify-around px-5">
-            <AddExpenseFileForm setExpenses={setExpensesData} />
-          </div>
-        </section>
-        <section className="w-full p-5 ">
-          <Heading text="Katagoryzuj wydatek" />
-          <div className="stack ml-auto w-full">
-            {expensesData.length
-              ? expensesData.map((expense, index) => (
-                  <ExpensesCard expense={expense} key={index} />
-                ))
-              : 'Nie masz wydatków, dodaj jakiś!'}
-          </div>
-          <h3 className="py-8 text-center text-lg">Kategorie</h3>
-          <div className="flex w-full flex-col gap-3  p-5 lg:flex-row">
-            {categories?.length ? (
-              categories.map((category) => (
-                <button
-                  key={category.id}
-                  className={`btn bg-${category.categoryColor}-500 `}
-                  onClick={(e) => addCostToCategory(e, category.id)}
-                >
-                  {category.categoryName}
-                </button>
-              ))
-            ) : (
-              <div>
-                <p>You dont have any categoires</p>
-                <Link className="text-blue-500" href={'/categories'}>
-                  Add categories
-                </Link>
-              </div>
-            )}
-          </div>
-        </section>
-        <section>
-          <Heading text={'Tabela wydatków'} />
-          {expenses?.length ? (
-            <div className="overflow-x-auto">
-              <table className="table w-full">
-                <thead>
-                  <tr>
-                    <th>Data</th>
-                    <th>Tytuł</th>
-                    <th>Miejsce</th>
-                    <th>Kategoria</th>
-                    <th>Kwota</th>
-                    <th>Akcja</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {expenses?.map((expense) => (
-                    <tr key={expense.id}>
-                      <th>
-                        {expense.transactionDate.toLocaleDateString('pl-PL')}
-                      </th>
-                      <td>{expense.title}</td>
-                      <td>{expense.contractor}</td>
-                      <td>{expense.category?.categoryName}</td>
-                      <td>{`${expense.value}${expense.currency}`}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+    <>
+      <Head>
+        <title>Wydatki</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <Layout>
+        <main className=" h-full gap-4 overflow-hidden">
+          <Instruction />
+          <Section alignment={''}>
+            <Heading text="Dodaj wydatki" />
+            <AddExpenseForm setExpense={addCostToCategory} />
+            <Heading text="Importuj wydatki" />
+            <div className="flex items-center justify-around px-5">
+              <AddExpenseFileForm setExpenses={addCostToCategory} />
             </div>
-          ) : (
-            <p>Nie masz wydatków</p>
-          )}
-        </section>
-      </main>
-    </Layout>
+          </Section>
+          <section>
+            <Heading text={'Tabela wydatków'} />
+            {expenses?.length ? (
+              <div className="overflow-x-auto">
+                <table className="table table-normal w-full">
+                  <thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Tytuł</th>
+                      <th className="hidden lg:table-cell">Miejsce</th>
+                      <th>Kategoria</th>
+                      <th className="hidden lg:table-cell">Kwota</th>
+                      <th>Akcja</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {expenses?.map((expense) => (
+                      <tr key={expense.id}>
+                        <th>
+                          {expense.transactionDate.toLocaleDateString('pl-PL')}
+                        </th>
+                        <td>{expense.title}</td>
+                        <td className="hidden lg:table-cell">
+                          {expense.contractor}
+                        </td>
+                        <td className="hidden lg:table-cell">
+                          <SelectForm
+                            categories={categoriesData.data}
+                            activeCategoryId={expense.category?.id}
+                            expenseId={expense.id}
+                          />
+                        </td>
+                        <td>{`${expense.value}${expense.currency}`}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <p>Nie masz wydatków</p>
+            )}
+          </section>
+        </main>
+      </Layout>
+    </>
   );
 };
 
