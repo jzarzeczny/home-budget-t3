@@ -5,9 +5,11 @@ export const Section = ({
   alignment,
 }: {
   children: ReactNode;
-  alignment: string;
+  alignment?: string;
 }) => {
   return (
-    <section className={`py-8  lg:bg-inherit ${alignment}`}>{children}</section>
+    <section className={`py-2 lg:py-8  lg:bg-inherit ${alignment}`}>
+      {children}
+    </section>
   );
 };

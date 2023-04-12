@@ -1,8 +1,7 @@
-import type { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
+import type { AddExpense } from 'types/Expenses';
 
 import { parseCSV } from '@utils/csvParsers';
-import type { TransactionInterface } from '@utils/csvParsers';
 
 export enum BankType {
   ING = 'ing',
@@ -17,7 +16,7 @@ export interface AddExpenseFileFormInterface {
 export const AddExpenseFileForm = ({
   setExpenses,
 }: {
-  setExpenses: Dispatch<SetStateAction<TransactionInterface[]>>;
+  setExpenses: (data: AddExpense | AddExpense[]) => void;
 }) => {
   const { register, handleSubmit } = useForm<AddExpenseFileFormInterface>();
 
@@ -26,29 +25,29 @@ export const AddExpenseFileForm = ({
       const parsedData = (await parseCSV(
         data.file[0],
         data.type
-      )) as TransactionInterface[];
-      setExpenses((prev: TransactionInterface[]) => [...prev, ...parsedData]);
+      )) as AddExpense[];
+      setExpenses(parsedData);
     }
   };
 
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="outline-neutral-300 flex w-full flex-col items-center p-8"
+      className="outline-neutral-300 flex w-full flex-col items-center px-5"
     >
-      <div className="form-control w-full">
+      <div className="form-control w-full max-w-xs">
         <label className="label">Wybierz plik</label>
         <input
           type="file"
-          className="file-input-bordered file-input-primary file-input w-full max-w-xs"
+          className="file-input-bordered  file-input w-full max-w-xs"
           accept=".csv"
           {...register('file')}
         />
       </div>
-      <div className="form-control w-full">
+      <div className="form-control w-full  max-w-xs">
         <label className="label">Wybierz bank</label>
         <select
-          className="select-primary select w-full max-w-xs"
+          className="select-bordered select w-full max-w-xs"
           defaultValue={'default'}
           {...register('type')}
         >
@@ -62,7 +61,7 @@ export const AddExpenseFileForm = ({
       <input
         type="submit"
         value="Importuj dane"
-        className=" btn-primary btn mt-3 w-full max-w-xs self-start"
+        className="  btn mt-3 w-full max-w-xs self-center"
       />
     </form>
   );

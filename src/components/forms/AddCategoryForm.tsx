@@ -12,12 +12,9 @@ export const AddCategoryForm = ({
 }) => {
   const { register, handleSubmit } = useForm<AddCategoryInterface>();
 
-  const onS = async (data: AddCategoryInterface) => {
-    await onSubmit(data);
-  };
   return (
     <form
-      onSubmit={handleSubmit(onS)}
+      onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col items-center px-8"
     >
       <div className="form-control w-full max-w-xs">
